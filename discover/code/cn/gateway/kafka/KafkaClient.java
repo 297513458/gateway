@@ -13,10 +13,13 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.zookeeper.ZooKeeper;
 import org.springframework.context.ApplicationListener;
 
-import com.htxx.core.logger.LoggerDTO;
-import com.htxx.core.logger.LoggerLevel;
+import com.fasterxml.jackson.databind.ser.std.StringSerializer;
 
-import cn.gateway.logger.LoggerEvent;
+import cn.gateway.logger.Logger;
+import cn.gateway.logger.LoggerDTO;
+import cn.gateway.logger.LoggerFactory;
+import cn.gateway.logger.LoggerLevel;
+import cn.gateway.watcher.LoggerEvent;
 import cn.gateway.watcher.ZookeeperSchedulingWatcher;
 
 public class KafkaClient {

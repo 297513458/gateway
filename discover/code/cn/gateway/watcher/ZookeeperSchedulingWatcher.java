@@ -16,7 +16,6 @@ import java.util.concurrent.Future;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
-import org.apache.hadoop.fs.shell.PathData.PathType;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
@@ -34,14 +33,17 @@ import org.springframework.scheduling.support.ScheduledMethodRunnable;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
-import com.htxx.core.annotation.Registering;
-import com.htxx.core.common.CommonUtil;
-import com.htxx.core.common.MD5Util;
-import com.htxx.core.pojo.SchedulingDTO;
-import com.htxx.core.util.NativeUtil;
-import com.htxx.core.util.ProfileUtil;
 
+import cn.gateway.annotation.Registering;
+import cn.gateway.core.common.MD5Util;
 import cn.gateway.kafka.KafkaClient;
+import cn.gateway.logger.Logger;
+import cn.gateway.logger.LoggerFactory;
+import cn.gateway.pojo.MicServiceInfo;
+import cn.gateway.pojo.Node;
+import cn.gateway.pojo.PathType;
+import cn.gateway.util.NativeUtil;
+import cn.gateway.util.ProfileUtil;
 
 @Component
 public class ZookeeperSchedulingWatcher extends ScheduledTaskRegistrar {
@@ -52,7 +54,7 @@ public class ZookeeperSchedulingWatcher extends ScheduledTaskRegistrar {
 	@Resource
 	private ApplicationContext applicationContext;
 	private static Logger logger = LoggerFactory.getLogger(KafkaClient.class);
-	Map<String, SchedulingDTO> schMap = null;
+	Map<String, MicServiceInfo> schMap = null;
 
 	public void reloadTask() {
 		try {
@@ -94,7 +96,7 @@ public class ZookeeperSchedulingWatcher extends ScheduledTaskRegistrar {
 			node.setBeanId(beanId);
 			if (node.getBeanId() == null) {
 				String[] info = node.getClazz().split("[.]");
-				node.setBeanId(CommonUtil.firstToLower(info[info.length - 1]));
+				//node.setBeanId(CommonUtil.firstToLower(info[info.length - 1]));
 			}
 			node.setClazz(type);
 			node.setPlatform("");
@@ -330,10 +332,10 @@ public class ZookeeperSchedulingWatcher extends ScheduledTaskRegistrar {
 			if (path.startsWith(PATH + "/deploy")) {
 				zk.getChildren(path, true);
 				Boolean reload = false;
-				SchedulingDTO old = null;
+				MicServiceInfo old = null;
 				if (schMap == null)
-					schMap = new HashMap<String, SchedulingDTO>();
-				SchedulingDTO vo = readMethodNode(zk.getData(path, true, null));
+					schMap = new HashMap<String, MicServiceInfo>();
+				MicServiceInfo vo = readMethodNode(zk.getData(path, true, null));
 				String key = vo.getClazz() + ":" + vo.getMethod();
 				if (schMap.containsKey(key)) {
 					old = schMap.get(key);
@@ -353,18 +355,18 @@ public class ZookeeperSchedulingWatcher extends ScheduledTaskRegistrar {
 
 	private String checkCode = null;
 
-	private SchedulingDTO readMethodNode(byte[] nodebyte) {
+	private MicServiceInfo readMethodNode(byte[] nodebyte) {
 		if (nodebyte != null) {
 			try {
 				Node node = JSON.parseObject(new String(nodebyte), Node.class);
 				if (node != null && node.getType().equalsIgnoreCase(Node.Type.METHOD.name())) {
-					SchedulingDTO vo = new SchedulingDTO();
+					MicServiceInfo vo = new MicServiceInfo();
 					String key = node.getClazz() + ":" + node.getMethod();
 					vo.setClazz(node.getClazz());
-					vo.setCron(node.getCron());
-					vo.setBeanid(node.getBeanId());
 					vo.setMethod(node.getMethod());
-					vo.setPlatform(node.getPlatform());
+//					vo.setBeanid(node.getBeanId());
+//					vo.setUrl(node.get());
+//					vo.setPlatform(node.getPlatform());
 					vo.setAllowHost(node.getAllowHost());
 					vo.setStatus(node.getStatus());
 					vo.setPath(key);
@@ -376,9 +378,9 @@ public class ZookeeperSchedulingWatcher extends ScheduledTaskRegistrar {
 		return null;
 	}
 
-	public void addTask(Object task, SchedulingDTO vo) throws Exception {
-		if (task != null && vo.getCron() != null) {
-			super.addCronTask(new ScheduledMethodRunnable(task, vo.getMethod()), vo.getCron());
+	public void addService(Object task, MicServiceInfo vo) throws Exception {
+		if (task != null && vo.getUrl() != null) {
+			super.addCronTask(new ScheduledMethodRunnable(task, vo.getMethod()), vo.getUrl());
 			String path = PATH + "/deploy/" + vo.getPath() + "/clients/"
 					+ NativeUtil.ipport(ProfileUtil.getZookeeperServers());
 			if (zk.exists(path, false) != null)
@@ -386,7 +388,7 @@ public class ZookeeperSchedulingWatcher extends ScheduledTaskRegistrar {
 		}
 	}
 
-	public void removeTask(SchedulingDTO vo) throws Exception {
+	public void removeTask(MicServiceInfo vo) throws Exception {
 		if (vo == null || vo.getClass() == null || vo.getMethod() == null)
 			return;
 		List<CronTask> cronlist = super.getCronTaskList();
@@ -431,14 +433,14 @@ public class ZookeeperSchedulingWatcher extends ScheduledTaskRegistrar {
 			if (path.startsWith(PATH + "/deploy")) {
 				zk.getChildren(path, true);
 				Boolean reload = false;
-				SchedulingDTO old = null;
+				MicServiceInfo old = null;
 				if (schMap == null)
-					schMap = new HashMap<String, SchedulingDTO>();
+					schMap = new HashMap<String, MicServiceInfo>();
 				byte[] nodebyte = zk.getData(path, true, null);
 				if (nodebyte != null) {
 					List<String> list = zk.getChildren(path, true);
 					for (String method : list) {
-						SchedulingDTO vo = readMethodNode(zk.getData(path + "/" + method, true, null));
+						MicServiceInfo vo = readMethodNode(zk.getData(path + "/" + method, true, null));
 						String key = vo.getClazz() + ":" + vo.getMethod();
 						if (schMap.containsKey(key)) {
 							old = schMap.get(key);
@@ -469,9 +471,9 @@ public class ZookeeperSchedulingWatcher extends ScheduledTaskRegistrar {
 			logger.info(path);
 			if (path.startsWith(PATH + "/deploy")) {
 				// Boolean reload = false;
-				SchedulingDTO old = null;
+				MicServiceInfo old = null;
 				if (schMap == null)
-					schMap = new HashMap<String, SchedulingDTO>();
+					schMap = new HashMap<String, MicServiceInfo>();
 				path = path.replace(PATH + "/deploy", "");
 				String[] info = path.split("/");
 				String key = info[1] + ":" + info[2];
@@ -493,23 +495,23 @@ public class ZookeeperSchedulingWatcher extends ScheduledTaskRegistrar {
 			if (!newCheckCode.equals(checkCode)) {
 				checkCode = newCheckCode;
 				this.cancelAll(false);
-				Iterator<Entry<String, SchedulingDTO>> it = schMap.entrySet().iterator();
+				Iterator<Entry<String, MicServiceInfo>> it = schMap.entrySet().iterator();
 				while (it.hasNext()) {
 					try {
-						Entry<String, SchedulingDTO> entry = it.next();
-						SchedulingDTO vo = entry.getValue();
-						if (vo.getBeanid() == null || vo.getBeanid().trim().length() == 0 || vo.getCron() == null) {
-							continue;
-						}
-						Object object = applicationContext.getBean(vo.getBeanid());
+						Entry<String, MicServiceInfo> entry = it.next();
+						MicServiceInfo vo = entry.getValue();
+//						if (vo.getBeanid() == null || vo.getBeanid().trim().length() == 0 || vo.getCron() == null) {
+//							continue;
+//						}
+						Object object = applicationContext.getBean(vo.getAllowHost());
 						// String[]
 						// beans=this.applicationContext.getBeanDefinitionNames();
 						// for(String bean:beans){
 						// object = applicationContext.getBean(bean);
 						// }
-						System.err.println(vo.getClazz() + ":" + vo.getMethod() + ":" + vo.getCron());
-						if (object != null && vo.getCron() != null) {
-							addTask(object, vo);
+						System.err.println(vo.getClazz() + ":" + vo.getMethod() + ":" + vo.getUrl());
+						if (object != null && vo.getUrl() != null) {
+							addService(object, vo);
 						}
 					} catch (org.springframework.beans.factory.NoSuchBeanDefinitionException e) {
 						logger.debug("忽略任务", e);
@@ -530,7 +532,7 @@ public class ZookeeperSchedulingWatcher extends ScheduledTaskRegistrar {
 	 */
 	private void scannerDeployed() {
 		try {
-			schMap = new HashMap<String, SchedulingDTO>();
+			schMap = new HashMap<String, MicServiceInfo>();
 			List<String> clazzList = zk.getChildren(PATH + "/deploy", true);
 			for (String clazz : clazzList) {
 				String clapath = PATH + "/deploy/" + clazz;
@@ -538,7 +540,7 @@ public class ZookeeperSchedulingWatcher extends ScheduledTaskRegistrar {
 				for (String method : methodList) {
 					try {
 						String methodPath = clapath + "/" + method;
-						SchedulingDTO vo = this.readMethodNode(zk.getData(methodPath, true, null));
+						MicServiceInfo vo = this.readMethodNode(zk.getData(methodPath, true, null));
 						if (vo != null) {
 							String key = vo.getClazz() + ":" + vo.getMethod();
 							schMap.put(key, vo);
