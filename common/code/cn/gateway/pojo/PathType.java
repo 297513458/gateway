@@ -2,7 +2,7 @@ package cn.gateway.pojo;
 
 public enum PathType {
 	KAFKALOG("kafka", "/kafka", "卡夫卡日志"), DEPLOY("deploy", "/deploy", "发布的节点"), REGISTERING("registering",
-			"/registering", "注册的节点"), TOPNODE("scheduling", "/scheduling", "主节点");
+			"/registering", "注册的节点"), TOPNODE("services", "/services", "主节点");
 	private String key;
 
 	private String message;

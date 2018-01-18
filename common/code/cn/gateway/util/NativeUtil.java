@@ -2,7 +2,6 @@ package cn.gateway.util;
 
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
-
 import cn.gateway.logger.Logger;
 import cn.gateway.logger.LoggerFactory;
 
