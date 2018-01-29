@@ -3,15 +3,13 @@ package cn.gateway.core.page;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
-
-import cn.gateway.logger.Logger;
-import cn.gateway.logger.LoggerFactory;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 public abstract class SuperDAO<T, PK extends Serializable> extends SqlSessionDaoSupport {
-	private static final Logger log = LoggerFactory.getLogger(SuperDAO.class);
+	private static final Logger log = LogManager.getLogger(SuperDAO.class);
 	private static final String STATMENT_COUNT_STRING = "Count";
 	private static final String STATMENT_lIST_STRING = "page";
 	private static final Integer DEFAULT_PAGE_ID = 1;

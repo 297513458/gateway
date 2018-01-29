@@ -34,7 +34,7 @@
 		<module>trace</module>
 		<!-- 数据传输 -->
 		<module>transmit</module>
-	</modules>transmit
+	</modules>
 	<properties>
 		<encoding>UTF-8</encoding>
 	</properties>
