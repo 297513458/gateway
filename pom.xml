@@ -18,6 +18,8 @@
 		<module>filter</module>
 		<!-- 信息收集器 -->
 		<module>gather</module>
+		<!-- 协议 -->
+		<module>protocol</module>
 		<!-- 日志 -->
 		<module>logs</module>
 		<!-- 管理平台 -->
@@ -32,7 +34,7 @@
 		<module>trace</module>
 		<!-- 数据传输 -->
 		<module>transmit</module>
-	</modules>
+	</modules>transmit
 	<properties>
 		<encoding>UTF-8</encoding>
 	</properties>

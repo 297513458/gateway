@@ -2,13 +2,10 @@ package com.htxx.scheduling.service.impl;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
 import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-
 import com.alibaba.fastjson.JSON;
 import com.htxx.core.common.MD5Util;
 import com.htxx.scheduling.common.ResultJson;
