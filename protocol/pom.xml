@@ -22,7 +22,6 @@
 			<artifactId>hessian</artifactId>
 			<version>4.0.51</version>
 		</dependency>
-
 		<dependency>
 			<groupId>cn.cnt</groupId>
 			<artifactId>logs</artifactId>

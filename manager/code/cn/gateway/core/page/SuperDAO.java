@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
-import org.mybatis.spring.support.SqlSessionDaoSupport;
 
-public abstract class SuperDAO<T, PK extends Serializable> extends
-		SqlSessionDaoSupport {
-	private static final Logger log = LogManager.getLogger(SuperDAO.class);
+import cn.gateway.logger.Logger;
+import cn.gateway.logger.LoggerFactory;
+
+public abstract class SuperDAO<T, PK extends Serializable> extends SqlSessionDaoSupport {
+	private static final Logger log = LoggerFactory.getLogger(SuperDAO.class);
 	private static final String STATMENT_COUNT_STRING = "Count";
 	private static final String STATMENT_lIST_STRING = "page";
 	private static final Integer DEFAULT_PAGE_ID = 1;
@@ -34,8 +36,7 @@ public abstract class SuperDAO<T, PK extends Serializable> extends
 	 *            查询明细sql 查询总数的sql名默认在列表查询上添加Count作为sql名称
 	 * @return
 	 */
-	protected final <P, R extends PageSearchVO> PageVO<P> queryByPage(R search,
-			String queryListString) {
+	protected final <P, R extends PageSearchVO> PageVO<P> queryByPage(R search, String queryListString) {
 		return this.queryByPage(search, queryListString, null);
 	}
 
@@ -50,8 +51,8 @@ public abstract class SuperDAO<T, PK extends Serializable> extends
 	 *            查询总数sql
 	 * @return
 	 */
-	protected final <P, R extends PageSearchVO> PageVO<P> queryByPage(R search,
-			String queryListString, String queryCountString) {
+	protected final <P, R extends PageSearchVO> PageVO<P> queryByPage(R search, String queryListString,
+			String queryCountString) {
 		if (search == null)
 			throw new NullPointerException("查询对象为空");
 		String listStatment = null;
@@ -63,7 +64,7 @@ public abstract class SuperDAO<T, PK extends Serializable> extends
 		} else {
 			listStatment = this.tip(STATMENT_lIST_STRING);
 		}
-		if (!StringUtils.hasText(listStatment))
+		if (!StringUtils.isBlank(listStatment))
 			throw new NullPointerException("查询语句为空");
 		SqlSession template = this.getSqlSession();
 		if (template == null)
@@ -98,14 +99,12 @@ public abstract class SuperDAO<T, PK extends Serializable> extends
 				countStatment.append(listStatment);
 				countStatment.append(STATMENT_COUNT_STRING);
 			}
-			Integer countSize = template.selectOne(countStatment.toString(),
-					search);
+			Integer countSize = template.selectOne(countStatment.toString(), search);
 			if (countSize == null)
 				countSize = 0;
 			p.setCountRecords(countSize);
-			int pageSize = p.getCountRecords() % maxResult == 0 ? p
-					.getCountRecords() / maxResult : (p.getCountRecords()
-					/ maxResult + 1);
+			int pageSize = p.getCountRecords() % maxResult == 0 ? p.getCountRecords() / maxResult
+					: (p.getCountRecords() / maxResult + 1);
 			if (pageSize <= 1)
 				pageSize = 1;
 			if (currentPageId >= pageSize) {
@@ -173,16 +172,14 @@ public abstract class SuperDAO<T, PK extends Serializable> extends
 		if (current < 1)
 			current = 1;
 		if (count - current < DEFAULT_MAX_SHOW_PAGE / 2) {
-			int i = (count - DEFAULT_MAX_SHOW_PAGE >= 1 ? count
-					- DEFAULT_MAX_SHOW_PAGE : 0) + 1;
+			int i = (count - DEFAULT_MAX_SHOW_PAGE >= 1 ? count - DEFAULT_MAX_SHOW_PAGE : 0) + 1;
 			for (; i <= count; i++) {
 				list.add(i);
 			}
 		}
 		if (count - current >= DEFAULT_MAX_SHOW_PAGE / 2) {
 			if (current - DEFAULT_MAX_SHOW_PAGE / 2 >= 1) {
-				for (int i = current - DEFAULT_MAX_SHOW_PAGE / 2; i <= current
-						+ DEFAULT_MAX_SHOW_PAGE / 2
+				for (int i = current - DEFAULT_MAX_SHOW_PAGE / 2; i <= current + DEFAULT_MAX_SHOW_PAGE / 2
 						&& i <= count; i++) {
 					list.add(i);
 				}
@@ -196,9 +193,9 @@ public abstract class SuperDAO<T, PK extends Serializable> extends
 	}
 
 	protected String tip(String sqlName) {
-		if (!StringUtils.hasText(sqlName))
+		if (!StringUtils.isBlank(sqlName))
 			throw new NullPointerException("sql名称不能为空");
-		if (!StringUtils.hasText(this.namespace()))
+		if (!StringUtils.isBlank(this.namespace()))
 			throw new NullPointerException("namespace名称不能为空");
 		StringBuilder sb = new StringBuilder();
 		if (!sqlName.startsWith(this.namespace())) {
@@ -238,13 +235,11 @@ public abstract class SuperDAO<T, PK extends Serializable> extends
 		if (batchList == null || batchList.isEmpty())
 			return index;
 		int max = 1000;
-		List<T> list = new ArrayList<T>(batchList.size() >= max ? max
-				: batchList.size());
+		List<T> list = new ArrayList<T>(batchList.size() >= max ? max : batchList.size());
 		for (T t : batchList) {
 			list.add(t);
 			count++;
-			if (++index >= batchList.size() || list.size() >= max
-					|| count >= batchList.size()) {
+			if (++index >= batchList.size() || list.size() >= max || count >= batchList.size()) {
 				this.getSqlSession().insert(this.tip("insertBatch"), list);
 				list.clear();
 				index = 0;
@@ -281,8 +276,7 @@ public abstract class SuperDAO<T, PK extends Serializable> extends
 	public T query(PK id) {
 		if (id == null)
 			return null;
-		return this.getSqlSession().selectOne(this.tip("selectByPrimaryKey"),
-				id);
+		return this.getSqlSession().selectOne(this.tip("selectByPrimaryKey"), id);
 	}
 
 	/**
