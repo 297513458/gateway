@@ -9,8 +9,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import cn.gateway.core.common.MessageDTO;
 import cn.gateway.manager.common.ResultJson;
+import cn.gateway.manager.pojo.Admin;
 import cn.gateway.manager.service.AdminService;
-import cn.gateway.manger.pojo.Admin;
 
 @Controller
 public class AdminController {

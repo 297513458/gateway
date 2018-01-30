@@ -1,4 +1,4 @@
-package cn.gateway.manger.pojo;
+package cn.gateway.manager.pojo;
 
 import java.util.Date;
 

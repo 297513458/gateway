@@ -1,6 +1,6 @@
 package cn.gateway.manager.service;
 
-import cn.gateway.manger.pojo.Admin;
+import cn.gateway.manager.pojo.Admin;
 
 public interface AdminService {
 

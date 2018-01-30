@@ -17,8 +17,8 @@ import com.alibaba.fastjson.TypeReference;
 import cn.gateway.core.common.MessageDTO;
 import cn.gateway.core.exception.DuplicateKeyException;
 import cn.gateway.manager.common.ResultJson;
+import cn.gateway.manager.pojo.Scheduling;
 import cn.gateway.manager.service.SchedulingService;
-import cn.gateway.manger.pojo.Scheduling;
 
 @Controller
 public class IndexController {

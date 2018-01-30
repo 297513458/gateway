@@ -1,6 +1,6 @@
 package cn.gateway.manager.service;
 
-import cn.gateway.manger.pojo.AdminVO;
+import cn.gateway.manager.pojo.AdminVO;
 
 public interface TokenService {
 

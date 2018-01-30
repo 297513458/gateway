@@ -1,4 +1,4 @@
-package cn.gateway.manger.dao;
+package cn.gateway.manager.dao;
 
 import java.util.Date;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import cn.gateway.core.page.SuperDAO;
-import cn.gateway.manger.pojo.Scheduling;
+import cn.gateway.manager.pojo.Scheduling;
 
 @Repository("schedulingDAO")
 public class SchedulingDAO extends SuperDAO<Scheduling, String> {

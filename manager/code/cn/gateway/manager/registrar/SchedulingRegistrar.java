@@ -1,4 +1,4 @@
-package cn.gateway.manger.registrar;
+package cn.gateway.manager.registrar;
 
 import java.util.ArrayList;
 import java.util.List;

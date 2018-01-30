@@ -9,8 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+
+import cn.gateway.manager.pojo.AdminVO;
 import cn.gateway.manager.service.TokenService;
-import cn.gateway.manger.pojo.AdminVO;
 
 public class SpringLogInterceptor implements HandlerInterceptor {
 	public static final ThreadLocal<AdminVO> CURRENTUSERLOCAL = new ThreadLocal<AdminVO>();

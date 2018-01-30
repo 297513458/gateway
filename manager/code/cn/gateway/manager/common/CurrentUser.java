@@ -1,6 +1,6 @@
 package cn.gateway.manager.common;
 
-import cn.gateway.manger.pojo.AdminVO;
+import cn.gateway.manager.pojo.AdminVO;
 /**
  * 当前用户信息
  * 

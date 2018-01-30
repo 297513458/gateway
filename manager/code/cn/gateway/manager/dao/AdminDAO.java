@@ -1,10 +1,10 @@
-package cn.gateway.manger.dao;
+package cn.gateway.manager.dao;
 
 import org.springframework.stereotype.Repository;
 
 import cn.gateway.core.page.SuperDAO;
-import cn.gateway.manger.pojo.Admin;
-import cn.gateway.manger.pojo.AdminVO;
+import cn.gateway.manager.pojo.Admin;
+import cn.gateway.manager.pojo.AdminVO;
 
 @Repository("adminDAO")
 public class AdminDAO extends SuperDAO<Admin, String> {

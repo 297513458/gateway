@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 
 import cn.gateway.core.common.KeyUtil;
+import cn.gateway.manager.dao.AdminDAO;
+import cn.gateway.manager.pojo.Admin;
+import cn.gateway.manager.pojo.AdminVO;
 import cn.gateway.manager.service.AdminService;
 import cn.gateway.manager.service.TokenService;
-import cn.gateway.manger.dao.AdminDAO;
-import cn.gateway.manger.pojo.Admin;
-import cn.gateway.manger.pojo.AdminVO;
 
 @Service("adminService")
 public class AdminServiceImpl implements AdminService {

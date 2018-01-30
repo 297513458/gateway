@@ -11,8 +11,8 @@ import com.alibaba.fastjson.JSON;
 import cn.gateway.core.common.MD5Util;
 import cn.gateway.manager.common.ResultJson;
 import cn.gateway.manager.common.SpringLogInterceptor;
+import cn.gateway.manager.pojo.AdminVO;
 import cn.gateway.manager.service.TokenService;
-import cn.gateway.manger.pojo.AdminVO;
 
 @Service("tokenService")
 public class TokenServiceImpl implements TokenService {
