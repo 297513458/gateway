@@ -3,11 +3,8 @@ package cn.gateway.manger.registrar;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-
-import org.apache.hadoop.fs.shell.PathData.PathType;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
@@ -19,11 +16,11 @@ import org.apache.zookeeper.data.Stat;
 import org.apache.zookeeper.server.auth.DigestAuthenticationProvider;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-
 import com.alibaba.fastjson.JSON;
-
-import cn.gateway.core.util.NativeUtil;
-import cn.gateway.core.util.ProfileUtil;
+import cn.gateway.pojo.Node;
+import cn.gateway.pojo.PathType;
+import cn.gateway.util.NativeUtil;
+import cn.gateway.util.ProfileUtil;
 
 @Component
 public class SchedulingRegistrar {
@@ -31,7 +28,8 @@ public class SchedulingRegistrar {
 	private ZooKeeper zk = null;
 	@Resource
 	private ApplicationContext applicationContext;
-	private static Logger logger = LoggerFactory.getLogger(SchedulingRegistrar.class);
+	protected static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager
+			.getLogger(SchedulingRegistrar.class);
 
 	/**
 	 * 发布任务到服务器端
@@ -78,7 +76,7 @@ public class SchedulingRegistrar {
 			dto.setPath(taskNodePath.toString());
 			return this.save(dto.getPath(), JSON.toJSONString(dto));
 		} catch (Exception e) {
-			logger.error("发布任务出错", e);
+			log.error("发布任务出错", e);
 		}
 		return false;
 	}
@@ -94,7 +92,7 @@ public class SchedulingRegistrar {
 			node.setPath(path);
 			return this.save(node.getPath(), JSON.toJSONString(node));
 		} catch (Exception e) {
-			logger.error("修改任务出错", e);
+			log.error("修改任务出错", e);
 		}
 		return false;
 	}
@@ -125,7 +123,7 @@ public class SchedulingRegistrar {
 			zk.delete(path, -1);
 			return true;
 		} catch (Exception e) {
-			logger.error("删除任务节点出错", e);
+			log.error("删除任务节点出错", e);
 		}
 		return false;
 	}
@@ -145,14 +143,14 @@ public class SchedulingRegistrar {
 				} else if (event.getState() == Watcher.Event.KeeperState.Disconnected) {
 					connection();
 				} else if (event.getState() == Watcher.Event.KeeperState.AuthFailed) {
-					logger.error("连接zookeeper认证失败");
+					log.error("连接zookeeper认证失败");
 					countdownlatch.countDown();
 				} else if (event.getState() == Watcher.Event.KeeperState.SyncConnected) {
-					logger.error("连接到zookeeper");
+					log.error("连接到zookeeper");
 					countdownlatch.countDown();
 				}
 			} catch (Exception e) {
-				logger.error("连接到zookeeper出错", e);
+				log.error("连接到zookeeper出错", e);
 			} finally {
 				countdownlatch.countDown();
 			}
@@ -189,7 +187,7 @@ public class SchedulingRegistrar {
 			if (stat == null)
 				zk.create(watcherPath.toString(), null, list, CreateMode.PERSISTENT);
 		} else {
-			logger.error("scheduled.zookeeper.servers没有配置,zookeeper任务调度没有地洞");
+			log.error("scheduled.zookeeper.servers没有配置,zookeeper任务调度没有地洞");
 		}
 		ipport = NativeUtil.ipport(zookeeperServers);
 		this.notifyAll();
@@ -240,7 +238,7 @@ public class SchedulingRegistrar {
 			}
 			return true;
 		} catch (Exception e) {
-			logger.error("修改节点数据出错", e);
+			log.error("修改节点数据出错", e);
 		}
 		return false;
 	}
@@ -290,7 +288,7 @@ public class SchedulingRegistrar {
 					}
 				}
 			} catch (Exception e) {
-				logger.error("修改节点数据出错", e);
+				log.error("修改节点数据出错", e);
 			}
 		}
 		return taskList;
@@ -333,7 +331,7 @@ public class SchedulingRegistrar {
 			}
 			return null;
 		} catch (Exception e) {
-			logger.error("修改节点数据出错", e);
+			log.error("修改节点数据出错", e);
 		}
 		return null;
 	}
@@ -399,7 +397,7 @@ public class SchedulingRegistrar {
 					return new String(data, "utf-8");
 			}
 		} catch (Exception e) {
-			logger.error("修改节点数据出错", e);
+			log.error("修改节点数据出错", e);
 		}
 		return null;
 	}

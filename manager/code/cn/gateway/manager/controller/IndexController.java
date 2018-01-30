@@ -3,9 +3,6 @@ package cn.gateway.manager.controller;
 import javax.annotation.Resource;
 
 import org.apache.http.HttpStatus;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,18 +12,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-
 import cn.gateway.core.common.MessageDTO;
+import cn.gateway.core.exception.DuplicateKeyException;
 import cn.gateway.manager.common.ResultJson;
 import cn.gateway.manager.service.SchedulingService;
 import cn.gateway.manger.pojo.Scheduling;
 
 @Controller
 public class IndexController {
-	protected static final Logger log = LogManager.getLogger(IndexController.class);
+	protected static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager
+			.getLogger(IndexController.class);
 	@Resource
 	private SchedulingService schedulingService;
 

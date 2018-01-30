@@ -24,8 +24,8 @@ public class HbaseClient {
 	public static void main(String[] args) throws Exception {
 		/*
 		 * >>>zookeeper--->>>ROOT-(单Region)--->>>.mema.--->>>表 -ROOT-
-		 * 表包含.META.表所在的region列表，该表只会有一个Region； Zookeeper中记录了-ROOT-表的location。
-		 * .META. 表包含所有的用户空间region列表，以及RegionServer的服务器地址。 必须配置hosts绑定才能连上
+		 * 表包含.META.表所在的region列表，该表只会有一个Region； Zookeeper中记录了-ROOT-表的location。 .META.
+		 * 表包含所有的用户空间region列表，以及RegionServer的服务器地址。 必须配置hosts绑定才能连上
 		 */
 		Configuration config = HBaseConfiguration.create();
 		config.set("hbase.zookeeper.property.clientPort", "2181");
@@ -33,11 +33,11 @@ public class HbaseClient {
 		Connection connection = ConnectionFactory.createConnection(config);
 		try {
 			HBaseAdmin admin = (HBaseAdmin) connection.getAdmin();
-			admin.tableExists("bestdatabase");
+			// admin.tableExists("bestdatabase");
 			ClusterStatus cs = admin.getClusterStatus();
 			System.err.println(cs.getServers());
 			Table table = connection.getTable(TableName.valueOf("bestdatabase"));
-			table.getTableDescriptor();
+			// table.getTableDescriptor();
 			try {
 				Get g = new Get(Bytes.toBytes("1"));
 				Result r = table.get(g);
@@ -45,7 +45,7 @@ public class HbaseClient {
 				String valueStr = Bytes.toString(value);
 				System.out.println("GET: " + valueStr);
 				for (int t = 0; t < 1000000; t++) {
-					List<Put> putlist=new ArrayList<Put>();
+					List<Put> putlist = new ArrayList<Put>();
 					for (int p = 0; p < 1000; p++) {
 						Put put = new Put(Bytes.toBytes(UUID.randomUUID().toString()));
 						put.addImmutable(Bytes.toBytes("message"), Bytes.toBytes("url"), put.getRow());

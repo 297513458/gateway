@@ -3,6 +3,7 @@ package cn.gateway.manager.service;
 import java.util.List;
 
 import cn.gateway.manger.pojo.Scheduling;
+import cn.gateway.pojo.Node;
 
 public interface SchedulingService {
 	public List<Node> listDeployTask(String platform);

@@ -2,23 +2,21 @@ package cn.gateway.manager.common;
 
 import java.util.Iterator;
 import java.util.Map.Entry;
-
 import javax.annotation.Resource;
 import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
 import cn.gateway.manager.service.TokenService;
 import cn.gateway.manger.pojo.AdminVO;
 
 public class SpringLogInterceptor implements HandlerInterceptor {
 	public static final ThreadLocal<AdminVO> CURRENTUSERLOCAL = new ThreadLocal<AdminVO>();
 
-	protected static final Logger log = LogManager.getLogger(SpringLogInterceptor.class);
+	protected static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager
+			.getLogger(SpringLogInterceptor.class);
 	@Value("${url.http:}")
 	private String http;
 	@Resource
@@ -56,7 +54,7 @@ public class SpringLogInterceptor implements HandlerInterceptor {
 		String token = request.getHeader("token");
 		if (!this.tokenService.checkToken(token))
 			throw new LoginException();
-		else{
+		else {
 			CurrentUser.set(this.tokenService.getToken(token));
 		}
 		return true;

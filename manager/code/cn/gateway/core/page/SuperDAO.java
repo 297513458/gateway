@@ -5,11 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.mybatis.spring.support.SqlSessionDaoSupport;
+import cn.gateway.core.exception.DuplicateKeyException;
 
 public abstract class SuperDAO<T, PK extends Serializable> extends SqlSessionDaoSupport {
-	private static final Logger log = LogManager.getLogger(SuperDAO.class);
+	protected static final org.apache.logging.log4j.Logger log = org.apache.logging.log4j.LogManager
+			.getLogger(SuperDAO.class);
 	private static final String STATMENT_COUNT_STRING = "Count";
 	private static final String STATMENT_lIST_STRING = "page";
 	private static final Integer DEFAULT_PAGE_ID = 1;
@@ -87,7 +88,7 @@ public abstract class SuperDAO<T, PK extends Serializable> extends SqlSessionDao
 		List<P> entityList = null;// 查询结果列表
 		try {
 			StringBuilder countStatment = new StringBuilder();
-			if (StringUtils.hasText(queryCountString)) {
+			if (StringUtils.isNotBlank(queryCountString)) {
 				if (queryCountString.startsWith(this.namespace())) {
 					countStatment.append(queryCountString);
 				} else {
@@ -217,9 +218,13 @@ public abstract class SuperDAO<T, PK extends Serializable> extends SqlSessionDao
 	 * @param t
 	 */
 	public int insert(T t) {
-		if (t == null)
-			return 0;
-		return this.getSqlSession().insert(this.tip("insert"), t);
+		try {
+			if (t == null)
+				return 0;
+			return this.getSqlSession().insert(this.tip("insert"), t);
+		} catch (DuplicateKeyException e) {
+			throw new cn.gateway.core.exception.DuplicateDataException(e);
+		}
 	}
 
 	/**
@@ -238,12 +243,17 @@ public abstract class SuperDAO<T, PK extends Serializable> extends SqlSessionDao
 			list.add(t);
 			count++;
 			if (++index >= batchList.size() || list.size() >= max || count >= batchList.size()) {
-				this.getSqlSession().insert(this.tip("insertBatch"), list);
+				try {
+					this.getSqlSession().insert(this.tip("insertBatch"), list);
+				} catch (DuplicateKeyException e) {
+					throw new cn.gateway.core.exception.DuplicateDataException(e);
+				}
 				list.clear();
 				index = 0;
 			}
 		}
 		return count;
+
 	}
 
 	/**

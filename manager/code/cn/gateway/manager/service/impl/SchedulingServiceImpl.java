@@ -3,16 +3,13 @@ package cn.gateway.manager.service.impl;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
 import javax.annotation.Resource;
-
 import org.springframework.stereotype.Service;
-
-import cn.gateway.core.common.CommonUtil;
 import cn.gateway.manager.service.SchedulingService;
 import cn.gateway.manger.dao.SchedulingDAO;
 import cn.gateway.manger.pojo.Scheduling;
 import cn.gateway.manger.registrar.SchedulingRegistrar;
+import cn.gateway.pojo.Node;
 
 @Service("schedulingService")
 public class SchedulingServiceImpl implements SchedulingService {
@@ -102,7 +99,7 @@ public class SchedulingServiceImpl implements SchedulingService {
 		entity.setId(UUID.randomUUID().toString());
 		if (entity.getBeanId() == null) {
 			String[] info = entity.getClazz().split("[.]");
-			entity.setBeanId(CommonUtil.firstToLower(info[info.length - 1]));
+			// entity.setBeanId(CommonUtil.firstToLower(info[info.length - 1]));
 		}
 		if (entity.getStatus() == null)
 			entity.setStatus(Node.Status.DEFAULT.getKey());
