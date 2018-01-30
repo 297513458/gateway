@@ -1,4 +1,4 @@
-package cn.gateway.core.page;
+package cn.gateway.manager.page;
 
 import java.util.List;
 

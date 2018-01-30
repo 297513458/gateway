@@ -2,7 +2,7 @@ package cn.gateway.manager.dao;
 
 import org.springframework.stereotype.Repository;
 
-import cn.gateway.core.page.SuperDAO;
+import cn.gateway.manager.page.SuperDAO;
 import cn.gateway.manager.pojo.Admin;
 import cn.gateway.manager.pojo.AdminVO;
 

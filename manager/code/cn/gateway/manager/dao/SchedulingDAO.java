@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import cn.gateway.core.page.SuperDAO;
+import cn.gateway.manager.page.SuperDAO;
 import cn.gateway.manager.pojo.Scheduling;
 
 @Repository("schedulingDAO")
