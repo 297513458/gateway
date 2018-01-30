@@ -47,9 +47,9 @@
 			<version>${zookeeper.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>cn.cnt</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>common</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

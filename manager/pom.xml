@@ -10,6 +10,19 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<url>http://gateway.cnt.cn</url>
+
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-bom</artifactId>
+				<version>2.10.0</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -61,7 +74,6 @@
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
-			<version>2.10.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mybatis</groupId>
@@ -69,9 +81,9 @@
 			<version>3.4.5</version>
 		</dependency>
 		<dependency>
-			<groupId>cn.cnt</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>common</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

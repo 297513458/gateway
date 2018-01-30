@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>cn.cnt</groupId>
 		<artifactId>gateway</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<url>http://gateway.cnt.cn</url>
 	<dependencies>
@@ -36,6 +36,11 @@
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.5.4</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>common</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

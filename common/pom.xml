@@ -38,9 +38,9 @@
 			<version>4.5.4</version>
 		</dependency>
 		<dependency>
-			<groupId>cn.cnt</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>logs</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>
