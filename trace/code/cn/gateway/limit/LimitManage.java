@@ -63,11 +63,12 @@ public class LimitManage {
 				if (comd == null) {
 					Limit lim = load(command);
 					if (lim == null)
-						return null;
+						lim = new Limit();
 					if (lim.getCount() <= 0)
 						lim.setCount(100);
 					if (lim.getSecond() <= 0)
 						lim.setSecond(1);
+					lim.setCommandName(command);
 					comd = new LimitCommand(lim.getSecond(), lim.getCount(), command);
 					map.put(command, comd);
 				}

@@ -30,10 +30,12 @@
 		<module>registry</module>
 		<!-- 路由器 -->
 		<module>router</module>
-		<!-- 调用链 -->
-		<module>trace</module>
+		<!--限流器 -->
+		<module>limit</module>
 		<!-- 数据传输 -->
 		<module>transmit</module>
+		<!-- 调用链 -->
+		<module>trace</module>
 	</modules>
 	<properties>
 		<encoding>UTF-8</encoding>
