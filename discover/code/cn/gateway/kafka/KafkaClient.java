@@ -15,12 +15,12 @@ import org.springframework.context.ApplicationListener;
 
 import com.fasterxml.jackson.databind.ser.std.StringSerializer;
 
+import cn.gateway.kafka.watcher.LoggerEvent;
+import cn.gateway.kafka.watcher.ZookeeperSchedulingWatcher;
 import cn.gateway.logger.Logger;
 import cn.gateway.logger.LoggerDTO;
 import cn.gateway.logger.LoggerFactory;
 import cn.gateway.logger.LoggerLevel;
-import cn.gateway.watcher.LoggerEvent;
-import cn.gateway.watcher.ZookeeperSchedulingWatcher;
 
 public class KafkaClient {
 	private static Lock lock = new ReentrantLock();
