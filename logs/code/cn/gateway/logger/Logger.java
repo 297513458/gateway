@@ -117,4 +117,6 @@ public interface Logger {
 	 * @param e
 	 */
 	public void warn(Throwable e);
+
+	public boolean isInfoEnabled();
 }
